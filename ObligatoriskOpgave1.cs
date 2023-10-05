@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
         public string? Title { get; set; }
         public int Id { get; set; }
         public int Price { get; set; }
+  
 
     public void ValidateTitle()
     {

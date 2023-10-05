@@ -11,18 +11,19 @@ namespace ObligatoriskOpgave
         public string Title { get; set; }
         public string Author { get; set; }
         public int Price { get; set; }
+        public int Id { get; set; }
 
         public Book(string title, string author, int price)
         {
-            this.Title = title;
-            this.Author = author;
-            this.Price = price;
+            Title = title;
+            Author = author;
+            Price = price;
         }
     }
     public class BookRepository
     {
         public List<Book> books = new List<Book>();
-
+        public int nextId = 1;
         public void AddBook(string title, string author, int price)
         {
             Book newBook = new Book(title, author, price);
@@ -44,7 +45,6 @@ namespace ObligatoriskOpgave
 
         public List<Book> Get()
         {
-            // Den her returnere listen af book objekterne
             return new List<Book>(books);
         }
         public List<Book> Get(string? sortBy = null)
@@ -62,14 +62,37 @@ namespace ObligatoriskOpgave
                         filteredBooks = filteredBooks.OrderBy(book => book.Price).ToList();
                         break;
                     default:
-                        // Handle unsupported sorting criteria
                         break;
                 }
             }
 
             return filteredBooks;
         }
+        public Book Delete(int id)
+        {
+            Book bookToRemove = books.FirstOrDefault(book => book.Id == id);
+            if (bookToRemove != null)
+            {
+                books.Remove(bookToRemove);
+            }
+            return bookToRemove;
+        }
 
+        public Book Update(int id, Book values)
+        {
+            Book bookToUpdate = books.FirstOrDefault(book => book.Id == id);
+            if (bookToUpdate != null)
+            {
+                bookToUpdate.Title = values.Title;
+                bookToUpdate.Author = values.Author;
+                bookToUpdate.Price = values.Price;
+            }
+            return bookToUpdate;
+        }
+        public Book GetById(int id)
+        {
+            return books.FirstOrDefault(book => book.Id == id);
+        }
     }
     class Program
     {
